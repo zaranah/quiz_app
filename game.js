@@ -11,6 +11,7 @@ let score = 0;
 let questionCounter = 0;
 let availableQuestions = [];
 
+// fecthを使用しない場合
 // let questions = [
 //   {
 //     question: "Inside which HTML element do we put the JavaScript??",
@@ -37,16 +38,35 @@ let availableQuestions = [];
 //     answer: 4
 //   }
 // ];
+// fecthを使用しない場合
 
 // fecthを使用する場合
 let questions = [];
 
-fetch("questions.json").then( res => {
+fetch("https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple").then( res => {
   return res.json();
 })
 .then(loadedQuestions => {
-  console.log(loadedQuestions);
-  questions = loadedQuestions;
+  console.log(loadedQuestions.results);
+  questions = loadedQuestions.results.map( loadedQuestion => {
+    const formattedQuestion = {
+      question: loadedQuestion.question
+    };
+
+    const answerChoices = [...loadedQuestion.incorrect_answers];
+    formattedQuestion.answer = Math.floor(Math.random() * 3) + 1;
+    answerChoices.splice(
+      formattedQuestion.answer - 1,
+      0,
+      loadedQuestion.correct_answer
+    );
+
+    answerChoices.forEach((choice, index) => {
+      formattedQuestion["choice" + (index + 1)] = choice;
+    });
+
+    return formattedQuestion;
+  });
   startGame();
 })
 .catch(err => {
@@ -62,8 +82,8 @@ const MAX_QUESTIONS = 3;
 startGame = () => {
   questionCounter = 0;
   score = 0;
-  availableQuestions = [ ...questions];
-  // availableQuestions = questions;
+  availableQuestions = [...questions];
+  // availableQuestions = questions; だと質問sではなくそのhtmlが出る
   console.log(availableQuestions);
   getNewQuestion();
 }
@@ -129,4 +149,6 @@ incrementScore = num => {
   scoreText.innerText = score;
 }
 
+// fecthを使用しない場合
 // startGame();
+// fecthを使用しない場合
