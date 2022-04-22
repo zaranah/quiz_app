@@ -49,33 +49,30 @@ fetch("https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=mul
   return res.json();
 })
 .then(loadedQuestions => {
-  console.log(loadedQuestions.results);
+  // console.log(loadedQuestions.results);
   questions = loadedQuestions.results.map( loadedQuestion => {
     const formattedQuestion = {
       question: loadedQuestion.question
     };
-
-    const answerChoices = [...loadedQuestion.incorrect_answers];
-    formattedQuestion.answer = Math.floor(Math.random() * 3) + 1;
+    const answerChoices = [...loadedQuestion.incorrect_answers]; //...を入れると配列になる（a b cじゃなくて[a, b, c]と出る）
+    formattedQuestion.answer = Math.floor(Math.random() * 4) + 1; //1~4のどれかになる
     answerChoices.splice(
       formattedQuestion.answer - 1,
       0,
       loadedQuestion.correct_answer
     );
-
     answerChoices.forEach((choice, index) => {
       formattedQuestion["choice" + (index + 1)] = choice;
     });
-
-    return formattedQuestion;
+    return formattedQuestion; //55lでquestion,58lでanswer,65lでchoice1...を入れた{}をmapで作っている
   });
+  // console.log(questions);
   startGame();
 })
 .catch(err => {
   console.error(err);
 });
 // fecthを使用する場合
-
 
 //CONSTANTS
 const CORRECT_BONUS = 10;
@@ -86,7 +83,7 @@ startGame = () => {
   score = 0;
   availableQuestions = [...questions];
   // availableQuestions = questions; だと質問sではなくそのhtmlが出る
-  console.log(availableQuestions);
+  // console.log(availableQuestions);
   getNewQuestion();
   game.classList.remove('hidden');
   loader.classList.add('hidden');
