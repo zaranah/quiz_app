@@ -4,7 +4,8 @@ const choices = Array.from(document.getElementsByClassName("choice-text"));
 const progressText = document.getElementById('progressText');
 const scoreText = document.getElementById('score');
 const progressBarFull = document.getElementById("progressBarFull");
-
+const loader = document.getElementById('loader');
+const game = document.getElementById('game');
 let currentQuestion = {};
 let acceptingAnswers = false;
 let score = 0;
@@ -39,6 +40,7 @@ let availableQuestions = [];
 //   }
 // ];
 // fecthを使用しない場合
+
 
 // fecthを使用する場合
 let questions = [];
@@ -86,6 +88,8 @@ startGame = () => {
   // availableQuestions = questions; だと質問sではなくそのhtmlが出る
   console.log(availableQuestions);
   getNewQuestion();
+  game.classList.remove('hidden');
+  loader.classList.add('hidden');
 }
 
 getNewQuestion = () => {
