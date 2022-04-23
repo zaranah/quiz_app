@@ -136,9 +136,23 @@ choices.forEach(choice => {
       incrementScore(CORRECT_BONUS);
     }
 
+    
+    const answer = currentQuestion.answer;
+    console.log(answer);
+    const correctAnswerClass = document.getElementsByClassName("choice-text")
+    console.log(correctAnswerClass);
+    const correctAnswer = correctAnswerClass[answer-1]
+    console.log(correctAnswer);
+    if (classToApply !== "correct") {
+      correctAnswer.parentElement.classList.add('correct');
+    }
+
     selectedChoice.parentElement.classList.add(classToApply);
 
     setTimeout(() => {
+      if (classToApply != "correct") {
+        correctAnswer.parentElement.classList.remove('correct');
+      }
       selectedChoice.parentElement.classList.remove(classToApply);
       getNewQuestion();
     }, 1000);
